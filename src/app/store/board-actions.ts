@@ -8,11 +8,18 @@ export const BoardActionTypes = {
 };
 
 export class MovementAction implements Action {
-  type = ActionTypes.MOVEMENT;
+  type = BoardActionTypes.MOVEMENT;
   constructor(public direction: MovementDirection) { }
 }
 
 export class SetTileAction implements Action {
-  type = ActionTypes.SET_TILE;
-  constructor(public row: number, public col: number, public spaceType: SpaceType) { }
+  type = BoardActionTypes.SET_TILE;
+  payload: any;
+  constructor(row: number, col: number, spaceType: SpaceType) {
+    this.payload = {
+      row: row,
+      col: col,
+      spaceType: spaceType
+    };
+  }
 }

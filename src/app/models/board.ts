@@ -2,7 +2,7 @@ import {SpaceType, SpaceTypeValues} from './space-type.enum';
 export class Board {
   boardSpaces: SpaceType[][] = [];
 
-  constructor(public cols: number, public rows: number) {
+  constructor(public rows: number, public cols: number) {
     for (let i = 0; i < rows; i++) {
       this.boardSpaces[i] = [];
       for (let j = 0; j < cols; j++) {
