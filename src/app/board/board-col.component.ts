@@ -1,19 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {SpaceType} from '../models/space-type.enum';
+import { BoardSpace } from '../models/board-space';
 @Component({
   selector: 'app-board-col',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-   <span class="col" [ngSwitch]="col">
-      <b *ngSwitchCase="types.EMPTY">*</b> 
-      <b *ngSwitchCase="types.PLAYER">P</b>
-      <b *ngSwitchCase="types.MONSTER">M</b>
-      <b *ngSwitchCase="types.ARROW">x</b>
-      <b *ngSwitchDefault>?</b>
+   <span [innerHTML]="col.generateView()">
   </span>
   `
 })
 export class BoardColComponent {
-  types = SpaceType;
-  @Input('col') col: SpaceType;
+  @Input('col') col: BoardSpace;
 }

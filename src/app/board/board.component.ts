@@ -1,4 +1,7 @@
-import { AfterViewInit, Component, HostListener, NgZone, OnInit } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, NgZone,
+  OnInit
+} from '@angular/core';
 import { environment } from '../../environments/environment';
 import {Store} from '@ngrx/store';
 import {MovementDirection} from '../models/movement-direction.enum';
@@ -13,7 +16,7 @@ import { Board } from '../models/board';
   template: `
     <div *ngIf="board; else loading">
       <h1>Board</h1>
-      <app-board-row [row]="row" *ngFor="let row of board.boardSpaces"></app-board-row>
+      <app-board-row [row]="row" *ngFor="let row of board.boardSpaces;"></app-board-row>
     </div>
     <ng-template #loading>Board loading...</ng-template>
   `,
@@ -29,25 +32,28 @@ import { Board } from '../models/board';
   .row {
     margin: 1px;
   }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardComponent implements OnInit, AfterViewInit {
   board: Board;
 
-  constructor(private store: Store<any>, private zone: NgZone) {
+  constructor(private store: Store<any>, private zone: NgZone, private detector: ChangeDetectorRef) {
     const self = this;
     this.store.subscribe((gameState: GameState) => {
         self.board = gameState.board;
+        self.detector.markForCheck();
       });
     setTimeout(() => {
      setInterval(() => {
       const row = Math.floor(Math.random() * environment.rows);
       const col = Math.floor(Math.random() * environment.cols);
       const randomValue = Math.floor(Math.random() * 4);
-      this.zone.run(() => {
-        this.store.dispatch(new SetTileAction(row, col, SpaceType[SpaceType[randomValue]]));
+      zone.run(() => {
+       self.store.dispatch(new SetTileAction(row, col, SpaceType[SpaceType[randomValue]]));
+       self.detector.detectChanges();
       });
-     }, 5);
+    }, 50);
    }, 2000);
 }
 

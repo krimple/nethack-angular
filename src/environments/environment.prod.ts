@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  rows: 30,
+  cols: 30
 };

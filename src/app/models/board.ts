@@ -1,13 +1,14 @@
 import {SpaceType, SpaceTypeValues} from './space-type.enum';
+import { BoardSpace } from './board-space';
 export class Board {
-  boardSpaces: SpaceType[][] = [];
+  boardSpaces: BoardSpace[][] = [];
 
   constructor(public rows: number, public cols: number) {
     for (let i = 0; i < rows; i++) {
       this.boardSpaces[i] = [];
       for (let j = 0; j < cols; j++) {
         const randomValue = Math.floor(Math.random() * 4);
-        this.boardSpaces[i][j] = SpaceType[SpaceType[randomValue]];
+        this.boardSpaces[i][j] = new BoardSpace(i, j, SpaceType[SpaceType[randomValue]]);
       }
     }
     console.log('board spaces : ');
