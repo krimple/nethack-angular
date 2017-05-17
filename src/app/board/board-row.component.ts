@@ -9,11 +9,7 @@ import { BoardSpace } from '../models/board-space';
     </div>
   `
 })
-export class BoardRowComponent implements OnChanges {
-  ngOnChanges(changes: SimpleChanges): void {
-    console.dir(changes);
-  }
-
+export class BoardRowComponent {
   @Input('row') row: BoardSpace[];
 
   indexOf(arg1: any, arg2: BoardSpace) {

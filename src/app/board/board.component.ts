@@ -21,35 +21,36 @@ import { Board } from '../models/board';
     <ng-template #loading>Board loading...</ng-template>
   `,
   styles: [`
-  :host {
-      font-family: monospace;
-      font-size: 2em;
-  }
   span.col {
-      margin: 1px;
-      padding: 0px;
+      margin: 0;
+      padding: 0;
   }
   .row {
-    margin: 1px;
+    margin: 0;
   }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class BoardComponent implements OnInit, AfterViewInit {
   board: Board;
 
-  constructor(private store: Store<any>, private zone: NgZone, private detector: ChangeDetectorRef) {
+  constructor(private store: Store<any>, private zone: NgZone,
+              private detector: ChangeDetectorRef) {
     const self = this;
     this.store.subscribe((gameState: GameState) => {
-        self.board = gameState.board;
-        self.detector.markForCheck();
-      });
+      self.board = gameState.board;
+      self.detector.detectChanges();
+    });
+  }
+
+  getCrazy() {
+    const self = this;
     setTimeout(() => {
      setInterval(() => {
       const row = Math.floor(Math.random() * environment.rows);
       const col = Math.floor(Math.random() * environment.cols);
       const randomValue = Math.floor(Math.random() * 4);
-      zone.run(() => {
+      self.zone.run(() => {
        self.store.dispatch(new SetTileAction(row, col, SpaceType[SpaceType[randomValue]]));
        self.detector.detectChanges();
       });

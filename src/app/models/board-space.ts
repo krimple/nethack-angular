@@ -6,17 +6,16 @@ export class BoardSpace {
   indexOf(): number {
     return this.row * 32768 + this.col;
   }
-
   generateView(): string {
     switch (this.spaceType) {
       case SpaceType.EMPTY:
-        return '.';
+        return 'gi-empty-chessboard';
       case SpaceType.ARROW:
-        return '*';
+        return 'gi-missile-pod';
       case SpaceType.MONSTER:
-        return 'M';
+        return 'gi-monkey';
       case SpaceType.PLAYER:
-        return '$';
+        return 'gi-donkey';
       default:
         return '?';
     }
