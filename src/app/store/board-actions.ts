@@ -9,7 +9,11 @@ export const BoardActionTypes = {
 
 export class MovementAction implements Action {
   type = BoardActionTypes.MOVEMENT;
-  constructor(public direction: MovementDirection) { }
+  payload: any;
+
+  constructor(direction: MovementDirection) {
+    this.payload = { direction: direction };
+  }
 }
 
 export class SetTileAction implements Action {

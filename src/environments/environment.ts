@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  rows: 10,
-  cols: 10
+  rows: 5,
+  cols: 5
 };

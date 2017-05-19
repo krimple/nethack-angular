@@ -1,5 +1,14 @@
 # NethackAngular
 
+Actions
+
+* Create board component with z-order of 0
+* Create sprite object, subclasses for each type of object
+* Create reducers for each sprite object
+* Create playfield component with z-order of 1
+* Add methods to add/remove sprites from playfield
+* Subscribe playfield to store
+ Create playfield turn() method
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.2.
 
 ## Development server
@@ -26,3 +35,16 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+Player -
+  direction
+  speed
+  position (x, y)
+  
+  
+missile
+  direction
+  speed
+  fuel-left
+

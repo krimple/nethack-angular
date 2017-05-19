@@ -19,7 +19,7 @@ export function gameReducer(state: GameState = initialState, action: Action): Ga
       const currentPlayerCol = state.board.player.col;
       const direction: MovementDirection = action.payload.direction;
       if (direction === MovementDirection.UP) {
-        moveUp();
+        //moveUp();
       }
     default:
       return state;

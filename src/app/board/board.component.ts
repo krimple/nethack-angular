@@ -1,6 +1,6 @@
 import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, NgZone,
-  OnInit
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, NgZone,
+  OnInit, ViewChild
 } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {Store} from '@ngrx/store';
@@ -16,32 +16,74 @@ import { Board } from '../models/board';
   template: `
     <div *ngIf="board; else loading">
       <h1>Board</h1>
-      <app-board-row [row]="row" *ngFor="let row of board.boardSpaces;"></app-board-row>
-    </div>
+      <canvas class="board" 
+              #boardCanvas width="{{ 100 * env.cols}}" height="{{ 100 * env.rows}}"></canvas>
+      <canvas class="gameplay"
+              #gameplayCanvas
+              width="{{ 100 * env.cols }}" height="{{ 100 * env.cols }}"></canvas>
+              
+    </div> 
     <ng-template #loading>Board loading...</ng-template>
   `,
   styles: [`
-  span.col {
-      margin: 0;
-      padding: 0;
-  }
-  .row {
-    margin: 0;
-  }
+    canvas.board {
+      border: 1px solid black;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 1;
+    }
+    
+    canvas.gameplay {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      z-index: 2;
+    }
   `],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class BoardComponent implements OnInit, AfterViewInit {
+  @ViewChild('boardCanvas') boardCanvas: ElementRef;
+  @ViewChild('gameplayCanvas') gameplayCanvas: ElementRef;
+  env = environment;
   board: Board;
 
   constructor(private store: Store<any>, private zone: NgZone,
               private detector: ChangeDetectorRef) {
+
     const self = this;
     this.store.subscribe((gameState: GameState) => {
       self.board = gameState.board;
       self.detector.detectChanges();
     });
   }
+
+  ngOnInit() {
+
+  }
+
+  ngAfterViewInit() {
+    this.paintBoard();
+    this.paintGamePlay();
+  }
+
+  paintBoard() {
+    const graphicsContext = this.boardCanvas.nativeElement.getContext('2d');
+    // paint rows
+    for (let i = 0; i < environment.rows; i++) {
+      graphicsContext.moveTo(0, i * 100);
+      graphicsContext.lineTo(environment.cols * 100, i * 100);
+    }
+
+    for (let i = 0; i < environment.cols; i++) {
+      graphicsContext.moveTo(i * 100, 0);
+      graphicsContext.lineTo(i * 100, environment.cols * 100);
+    }
+
+    graphicsContext.strokeStyle = 'black';
+    graphicsContext.stroke();
+ }
 
   getCrazy() {
     const self = this;
@@ -72,7 +114,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
         direction = MovementDirection.LEFT;
         break;
       case 'l':
-        direction = MovementDirection.RIGHT;
+
         break;
     }
     if (direction !== null) {
@@ -82,13 +124,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-  ngOnInit() {
-
+  paintGamePlay() {
+     const graphicsContext = this.gameplayCanvas.nativeElement.getContext('2d');
+     graphicsContext.fillRect(15, 15, 300, 500);
   }
 
-  ngAfterViewInit() {
-
-  }
 
 }
