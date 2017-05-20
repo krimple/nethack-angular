@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
-import {StoreModule} from '@ngrx/store';
-import {gameReducer} from './game-reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {StoreModule} from '@ngrx/store';
+import { boardReducer } from './board-reducer';
 
-const store = StoreModule.provideStore(gameReducer);
+const store = StoreModule.provideStore({ board: boardReducer });
 @NgModule({
   imports: [
     store,

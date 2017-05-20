@@ -1,10 +1,6 @@
 import { SpaceType } from './space-type.enum';
 export class BoardSpace {
-  constructor(public row: number, public col: number, public spaceType: SpaceType) {
-  }
-
-  indexOf(): number {
-    return this.row * 32768 + this.col;
+  constructor(public spaceType: SpaceType) {
   }
 
   generateView(): string {

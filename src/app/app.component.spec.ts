@@ -1,13 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
-import {BoardComponent} from './board/board.component';
-
-import {Store} from '@ngrx/store';
-import {BoardRowComponent} from './board/board-row.component';
 import {BoardColComponent} from './board/board-col.component';
+import {BoardComponent} from './board/board.component';
+import {BoardRowComponent} from './board/board-row.component';
+import {Store} from '@ngrx/store';
 
-describe('AppComponent', () => {
+xdescribe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [

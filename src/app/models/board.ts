@@ -1,14 +1,33 @@
 import {SpaceType, SpaceTypeValues} from './space-type.enum';
+
 import { BoardSpace } from './board-space';
+import { List } from 'immutable';
+
 export class Board {
-  boardSpaces: BoardSpace[][] = [];
+  boardSpaces: any;
 
   constructor(public rows: number, public cols: number) {
-    for (let i = 0; i < rows; i++) {
-      this.boardSpaces[i] = [];
-      for (let j = 0; j < cols; j++) {
+    this.emptyBoardPopulator();
+  }
+
+  emptyBoardPopulator() {
+    const boardSpaces: BoardSpace[][] = [];
+
+    for (let i = 0; i < this.rows; i++) {
+      boardSpaces[i] = [];
+      for (let j = 0; j < this.cols; j++) {
         const randomValue = Math.floor(Math.random() * 4);
-        this.boardSpaces[i][j] = new BoardSpace(i, j, SpaceType[SpaceType[randomValue]]);
+        boardSpaces[i][j] = new BoardSpace(SpaceType.EMPTY);
+      }
+    }
+    this.boardSpaces = List.of(boardSpaces);
+   }
+  randomPopulator() {
+    for (let i = 0; i < this.rows; i++) {
+      this.boardSpaces[i] = [];
+      for (let j = 0; j < this.cols; j++) {
+        const randomValue = Math.floor(Math.random() * 4);
+        this.boardSpaces[i][j] = new BoardSpace(SpaceType[SpaceType[randomValue]]);
       }
     }
     console.log('board spaces : ');

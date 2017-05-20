@@ -23,3 +23,5 @@ export class SetTileAction implements Action {
     };
   }
 }
+
+export type BoardActions = MovementAction | SetTileAction;
