@@ -1,3 +1,3 @@
 export enum MovementDirection {
-  UP, DOWN, LEFT, RIGHT
+  UP, DOWN, LEFT, RIGHT, STOP
 }

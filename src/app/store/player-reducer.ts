@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 import { PlayerActionTypes, SetDirectionAction } from './player-actions';
 import { environment } from '../../environments/environment';
-import { MovementAction } from './board-actions';
 import { MovementDirection } from '../models/movement-direction.enum';
 import { GamePlayActionTypes } from './game-play-actions';
 
@@ -34,6 +33,8 @@ function setDirection(state: any, action: SetDirectionAction) {
       return Object.assign({}, state, {vx: state.vx - 1});
     case MovementDirection.RIGHT:
       return Object.assign({}, state, {vx: state.vx + 1});
+    case MovementDirection.STOP:
+      return Object.assign({}, state, { vx: 0, vy: 0});
   }
 }
 

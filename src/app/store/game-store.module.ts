@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
-import {StoreModule} from '@ngrx/store';
-import {gameReducer} from './game-reducer';
+import {combineReducers, StoreModule} from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {playerReducer} from './player-reducer';
 
-const store = StoreModule.provideStore(gameReducer);
+
+const store = StoreModule.provideStore({ player: playerReducer });
 @NgModule({
   imports: [
     store,
