@@ -1,14 +1,12 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { GameStoreModule } from './store/game-store.module';
-
 import { AppComponent } from './app.component';
-import { BoardComponent } from './board/board.component';
-import { BoardElementsPipe } from './board-elements.pipe';
 import { BoardColComponent } from './board/board-col.component';
+import { BoardComponent } from './board/board.component';
 import { BoardRowComponent } from './board/board-row.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { GameStoreModule } from './store/game-store.module';
+import { HttpModule } from '@angular/http';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -16,7 +14,6 @@ import { BoardRowComponent } from './board/board-row.component';
     BoardComponent,
     BoardRowComponent,
     BoardColComponent,
-    BoardElementsPipe
   ],
   imports: [
     BrowserModule,

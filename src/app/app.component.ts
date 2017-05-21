@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+
+import { SetTileAction } from './store/board-actions';
+import { SpaceType } from './models/space-type.enum';
 import {Store} from '@ngrx/store';
 
 @Component({
@@ -10,6 +13,6 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<any>)  { }
 
   ngOnInit() {
-    this.store.dispatch({ payload: 'boo!', type: 'NOTHING'});
+    this.store.dispatch(new SetTileAction(0, 0, SpaceType.MONSTER));
   }
 }
