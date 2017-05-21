@@ -12,9 +12,7 @@ import {
 } from '@angular/core';
 import { MovementAction, SetTileAction } from '../store/board-actions';
 
-import { Board } from '../models/board';
 import { BoardSpace } from '../models/board-space';
-import { GameState } from '../store/game.state';
 import {MovementDirection} from '../models/movement-direction.enum';
 import { Observable } from 'rxjs/Observable';
 import {SpaceType} from '../models/space-type.enum';
@@ -24,9 +22,13 @@ import { environment } from '../../environments/environment';
   selector: 'app-board',
   template: `
     <h1>Board</h1>
+    <div>
+      <span><b>X</b></span>&nbsp;<span [innerHTML]="(board$ | async).get('x')"></span>
+      <span><b>Y</b></span>&nbsp;<span [innerHTML]="(board$ | async).get('y')"></span>
+    </div>
     <app-board-row 
           [row]="row" 
-          *ngFor="let row of (board$ | async).toJS()"></app-board-row>
+          *ngFor="let row of (board$ | async).get('boardSpaces').toJS()"></app-board-row>
   `,
   styles: [`
   :host {
@@ -52,7 +54,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new SetTileAction(8, 8, SpaceType.PLAYER));
   }
 
-  @HostListener('window:keyup', ['$event']) processKeyStroke(event: any) {
+  @HostListener('window:keypress', ['$event']) processKeyStroke(event: any) {
     console.dir(event.key);
     let direction: MovementDirection = null;
     switch (event.key) {
@@ -70,9 +72,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
         break;
     }
     if (direction !== null) {
-      console.log('dispatching');
-      console.dir(direction);
-      this.store.dispatch(new MovementAction(direction));
+        this.store.dispatch(new MovementAction(direction));
     }
   }
 
