@@ -51,7 +51,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<any>, private zone: NgZone, private detector: ChangeDetectorRef) {
     const self = this;
     this.board$ = this.store.select('board');
-    this.store.dispatch(new SetTileAction(8, 8, SpaceType.PLAYER));
   }
 
   @HostListener('window:keypress', ['$event']) processKeyStroke(event: any) {

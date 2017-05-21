@@ -13,6 +13,6 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<any>)  { }
 
   ngOnInit() {
-    this.store.dispatch(new SetTileAction(0, 0, SpaceType.MONSTER));
+    this.store.dispatch(new SetTileAction(0, 0, SpaceType.PLAYER));
   }
 }

@@ -104,7 +104,7 @@ function moveRow(state, action) {
   if (targetRow >= environment.rows ) {
     targetRow = 0;
   } else if (targetRow  < 0) {
-    targetRow = environment.cols - 1;
+    targetRow = environment.rows - 1;
   }
 
   console.log(`Y by ${delta} to ${targetRow}`);
