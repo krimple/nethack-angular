@@ -30,16 +30,16 @@ describe('Board reducer spec', () => {
   });
   it('should allow left and right movement across the board', () => {
     let state = initialState;
-    for (let i = 1; i < 50; i++) {
+    for (let i = 0; i < 49; i++) {
       const nextState = boardReducer(state, new MovementAction(MovementDirection.RIGHT));
-      expect(nextState.get('x')).toBe(i % environment.cols);
+      expect(nextState.getIn(['playerPosition', 'x'])).toBe(i % environment.cols);
       state = nextState;
     }
     // reset
     state = initialState;
-    for (let i = 30; i > 0; i--) {
+    for (let i = 30; i >= 0; i--) {
       const nextState = boardReducer(state, new MovementAction(MovementDirection.LEFT));
-      expect(nextState.get('x')).toBe(i % environment.cols);
+      expect(nextState.getIn(['playerPosition', 'x'])).toBe(i % environment.cols);
       state = nextState;
     }
   });

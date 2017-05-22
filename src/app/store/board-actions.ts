@@ -4,7 +4,10 @@ import {SpaceType} from '../models/space-type.enum';
 
 export const BoardActionTypes = {
   MOVEMENT: 'MOVEMENT',
-  SET_TILE: 'SET_TILE'
+  SET_TILE: 'SET_TILE',
+  FIRE_MISSILE: 'FIRE_MISSILE',
+  ANIMATE_MISSILE: 'ANIMATE_MISSILE',
+  DESTROY_MISSILE: 'DESTROY_MISSILE'
 };
 
 export class MovementAction implements Action {
@@ -29,4 +32,20 @@ export class SetTileAction implements Action {
   }
 }
 
-export type BoardActions = MovementAction | SetTileAction;
+export class FireMissileAction implements Action {
+  type = BoardActionTypes.FIRE_MISSILE;
+}
+
+export class AnimateMissileAction implements Action {
+  payload: number;
+  type = BoardActionTypes.ANIMATE_MISSILE;
+  constructor(spacesLeft: number) {
+    this.payload = spacesLeft;
+  }
+}
+
+export class DestroyMissileAction implements Action {
+  type = BoardActionTypes.DESTROY_MISSILE;
+}
+
+export type BoardActions = AnimateMissileAction | DestroyMissileAction | FireMissileAction | MovementAction | SetTileAction;

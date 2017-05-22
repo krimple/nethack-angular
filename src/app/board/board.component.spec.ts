@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
 import {BoardColComponent} from './board-col.component';
 import { BoardComponent } from './board.component';
-import {BoardElementsPipe} from '../board-elements.pipe';
 import {BoardRowComponent} from './board-row.component';
 import {Store} from '@ngrx/store';
 
@@ -12,7 +11,7 @@ xdescribe('BoardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BoardComponent, BoardElementsPipe, BoardColComponent, BoardRowComponent],
+      declarations: [ BoardComponent, BoardColComponent, BoardRowComponent],
       providers: [
         {
           provide: Store,

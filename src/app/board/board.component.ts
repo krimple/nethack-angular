@@ -10,7 +10,7 @@ import {
   NgZone,
   OnInit,
 } from '@angular/core';
-import { MovementAction, SetTileAction } from '../store/board-actions';
+import { MovementAction, SetTileAction, FireMissileAction } from '../store/board-actions';
 
 import { BoardSpace } from '../models/board-space';
 import { MovementDirection } from '../models/movement-direction.enum';
@@ -23,8 +23,8 @@ import { environment } from '../../environments/environment';
   template: `
     <h1>Board</h1>
     <div>
-      <span><b>X</b></span>&nbsp;<span [innerHTML]="(board$ | async).get('x')"></span>
-      <span><b>Y</b></span>&nbsp;<span [innerHTML]="(board$ | async).get('y')"></span>
+      <span><b>X</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'x'])"></span>
+      <span><b>Y</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'y'])"></span>
     </div>
     <app-board-row 
           [row]="row" 
@@ -74,6 +74,8 @@ export class BoardComponent {
       case 'l':
         direction = MovementDirection.RIGHT;
         break;
+      case 'f':
+        this.store.dispatch(new FireMissileAction());
     }
     if (direction !== null) {
         this.store.dispatch(new MovementAction(direction));

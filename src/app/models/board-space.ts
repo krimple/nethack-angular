@@ -13,6 +13,8 @@ export class BoardSpace {
         return 'M';
       case SpaceType.PLAYER:
         return '$';
+      case SpaceType.MISSILE:
+        return '*';
       default:
         return '?';
     }
