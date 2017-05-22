@@ -13,9 +13,9 @@ import {
 import { MovementAction, SetTileAction } from '../store/board-actions';
 
 import { BoardSpace } from '../models/board-space';
-import {MovementDirection} from '../models/movement-direction.enum';
+import { MovementDirection } from '../models/movement-direction.enum';
 import { Observable } from 'rxjs/Observable';
-import {SpaceType} from '../models/space-type.enum';
+import { SpaceType } from '../models/space-type.enum';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -28,7 +28,8 @@ import { environment } from '../../environments/environment';
     </div>
     <app-board-row 
           [row]="row" 
-          *ngFor="let row of (board$ | async).get('boardSpaces').toJS()"></app-board-row>
+          *ngFor="let row of (board$ | async).get('boardSpaces').toJS(); trackBy: trackByFn;">
+    </app-board-row>
   `,
   styles: [`
   :host {
@@ -45,12 +46,16 @@ import { environment } from '../../environments/environment';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BoardComponent implements OnInit, AfterViewInit {
+export class BoardComponent {
   board$: Observable<Immutable.List<Immutable.List<BoardSpace>>>;
 
   constructor(private store: Store<any>, private zone: NgZone, private detector: ChangeDetectorRef) {
     const self = this;
     this.board$ = this.store.select('board');
+  }
+
+  trackByFn(index, row) {
+    return index;
   }
 
   @HostListener('window:keypress', ['$event']) processKeyStroke(event: any) {
@@ -74,14 +79,4 @@ export class BoardComponent implements OnInit, AfterViewInit {
         this.store.dispatch(new MovementAction(direction));
     }
   }
-
-
-  ngOnInit() {
-
-  }
-
-  ngAfterViewInit() {
-
-  }
-
 }
