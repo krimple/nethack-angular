@@ -7,5 +7,5 @@ export const environment = {
   production: false,
   rows: 10,
   cols: 30,
-  animateTimerTicks: 300
+  animateTimerTicks: 30
 };

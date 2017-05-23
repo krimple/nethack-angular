@@ -1,19 +1,26 @@
-import { Injectable } from '@angular/core';
-import { BoardActions } from "app/store/board-actions";
-import { Actions, Effect, toPayload } from '@ngrx/effects';
-import * as actions from './board-actions';
-import { environment } from '../../environments/environment';
-import { Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/timer';
 
+import * as actions from './board-actions';
+
+import { Actions, Effect, toPayload } from '@ngrx/effects';
+
+import { BoardActions } from 'app/store/board-actions';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class BoardEffects {
     @Effect() beginMissileAnimation$ = this.actions$
                           .ofType(actions.BoardActionTypes.FIRE_MISSILE)
-                          .switchMap(() => Observable.of(new actions.AnimateMissileAction(environment.cols - 2)));
+                          .switchMap(() => Observable.of(new actions.AnimateMissileAction(environment.cols - 3)));
     
     @Effect() animateMissileSpace$ = this.actions$
               .ofType(actions.BoardActionTypes.ANIMATE_MISSILE)

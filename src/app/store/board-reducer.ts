@@ -1,9 +1,9 @@
 import * as Immutable from 'immutable';
 
-import { BoardActionTypes, FireMissileAction, MovementAction, SetTileAction } from './board-actions';
+import { AnimateMissileAction, BoardActions } from './board-actions';
+import { BoardActionTypes, DestroyMissileAction, FireMissileAction, MovementAction, SetTileAction } from './board-actions';
 
 import { Action } from '@ngrx/store';
-import { BoardActions, AnimateMissileAction } from './board-actions';
 import { BoardSpace } from '../models/board-space';
 import { MovementDirection } from '../models/movement-direction.enum';
 import { SpaceType } from '../models/space-type.enum';
@@ -21,19 +21,18 @@ for (let i = 0; i < environment.rows; i++) {
 
 const immutableStateStarter = Immutable.Map({
   playerLocation: Immutable.Map({
-    x: 0,
-    y: 0
+    col: 0,
+    row: 0
   }),
   missileLocation: Immutable.Map({
-    x: 0,
-    y: 0,
+    col: 0,
+    row: 0,
     active: false
   }),
   boardSpaces: Immutable.fromJS(boardSpaceSeedData)
 });
 
 export function boardReducer(state = immutableStateStarter, action: Action) {
-  console.log(`Action dispatched to boardReducer with Action: ${JSON.stringify(action)} and state: ${JSON.stringify(state)}`);
   switch (action.type) {
     case BoardActionTypes.SET_TILE:
       return setTileIn(state, <SetTileAction>action);
@@ -43,6 +42,8 @@ export function boardReducer(state = immutableStateStarter, action: Action) {
       return fireMissileInNextSpace(state, <FireMissileAction>action);
     case BoardActionTypes.ANIMATE_MISSILE:
       return animateMissile(state, <AnimateMissileAction>action);
+    case BoardActionTypes.DESTROY_MISSILE:
+      return destroyMissile(state, <DestroyMissileAction>action);
     default:
       return state;
   }
@@ -53,15 +54,15 @@ function fireMissileInNextSpace(state, action: FireMissileAction) {
   if (state.getIn(['missileLocation', 'active'])) {
     return state;
   } else {
-    const locationCol = state.getIn(['playerLocation', 'x']); 
-    const locationRow = state.getIn(['playerLocation', 'y'])
+    const locationCol = state.getIn(['playerLocation', 'col']);
+    const locationRow = state.getIn(['playerLocation', 'row']);
     const targetMissileLocationCol = calculateColumn(locationCol + 1);
 
     return state.withMutations((theState) => {
       theState
         .setIn(['boardSpaces', locationRow, targetMissileLocationCol], new BoardSpace(SpaceType.MISSILE))
-        .setIn(['missileLocation', 'x'], targetMissileLocationCol)
-        .setIn(['missileLocation', 'y'], locationRow)
+        .setIn(['missileLocation', 'col'], targetMissileLocationCol)
+        .setIn(['missileLocation', 'row'], locationRow)
         .setIn(['missileLocation', 'active'], true);
     });
   }
@@ -79,20 +80,32 @@ function setTileIn(state, action: SetTileAction) {
 }
 
 function animateMissile(state, action: AnimateMissileAction) {
-    const locationCol = state.getIn(['missileLocation', 'x']); 
-    const locationRow = state.getIn(['missileLocation', 'y'])
+    const locationCol = state.getIn(['missileLocation', 'col']); 
+    const locationRow = state.getIn(['missileLocation', 'row'])
     const targetMissileLocationCol = calculateColumn(locationCol + 1);
 
     return state.withMutations((theState) => {
       theState
         .setIn(['boardSpaces', locationRow, locationCol], new BoardSpace(SpaceType.EMPTY))
         .setIn(['boardSpaces', locationRow, targetMissileLocationCol], new BoardSpace(SpaceType.MISSILE))
-        .setIn(['missileLocation', 'x'], targetMissileLocationCol)
-        .setIn(['missileLocation', 'y'], locationRow)
+        .setIn(['missileLocation', 'col'], targetMissileLocationCol)
+        .setIn(['missileLocation', 'row'], locationRow)
         .setIn(['missileLocation', 'active'], true);
     });
   }
 
+  function destroyMissile(state, action: DestroyMissileAction) {
+    const missileLocationRow = state.getIn(['missileLocation', 'row']);
+    const missileLocationCol = state.getIn(['missileLocation', 'col']);
+
+    return state.withMutations((theState) => {
+      theState
+        .setIn(['boardSpaces', missileLocationRow, missileLocationCol], new BoardSpace(SpaceType.EMPTY))
+        .setIn(['missileLocation', 'col'], 0)
+        .setIn(['missileLocation', 'row'], 0)
+        .setIn(['missileLocation', 'active'], false);
+    });
+  }
 function movePlayer(state, action: MovementAction) {
   const direction = action.payload.direction;
   switch (direction) {
@@ -108,8 +121,8 @@ function movePlayer(state, action: MovementAction) {
 }
 
 function moveCol(state, action) {
-  const currentCol = state.getIn(['playerLocation', 'x']);
-  const currentRow = state.getIn(['playerLocation', 'y']);
+  const currentCol = state.getIn(['playerLocation', 'col']);
+  const currentRow = state.getIn(['playerLocation', 'row']);
   const delta = action.payload.direction === MovementDirection.LEFT ? -1 : 1;
   const targetCol = calculateColumn(currentCol + delta);
 
@@ -119,24 +132,24 @@ function moveCol(state, action) {
       new BoardSpace(SpaceType.EMPTY))
       .setIn(['boardSpaces', currentRow, targetCol],   // render new space
       new BoardSpace(SpaceType.PLAYER))
-      .setIn(['playerLocation', 'x'], targetCol);                             // track new X
+      .setIn(['playerLocation', 'col'], targetCol);                             // track new X
   });
   return newState;
 }
 
 function moveRow(state, action) {
-  const currentCol = state.getIn(['playerLocation', 'x']);
-  const currentRow = state.getIn(['playerLocation', 'y']);
+  const currentCol = state.getIn(['playerLocation', 'col']);
+  const currentRow = state.getIn(['playerLocation', 'row']);
   const delta = action.payload.direction === MovementDirection.UP ? -1 : 1;
   const targetRow = calculateRow(currentRow + delta);
 
  let newState = state.withMutations((theState) => {
     theState
-      .setIn(['boardSpaces', currentRow, currentCol], 
+      .setIn(['boardSpaces', currentRow, currentCol],
          new BoardSpace(SpaceType.EMPTY))
       .setIn(['boardSpaces', targetRow, currentCol],
          new BoardSpace(SpaceType.PLAYER))
-      .setIn(['playerLocation', 'y'], targetRow);                             // track new X
+      .setIn(['playerLocation', 'row'], targetRow);                             // track new X
   });
 
   return newState;
@@ -150,7 +163,7 @@ function calculateColumn(targetCol): number {
   } else {
     return targetCol;
   }
-}  
+}
 
 function calculateRow(targetRow): number {
   if (targetRow >= environment.rows ) {

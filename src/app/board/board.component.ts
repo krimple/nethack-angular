@@ -10,7 +10,7 @@ import {
   NgZone,
   OnInit,
 } from '@angular/core';
-import { MovementAction, SetTileAction, FireMissileAction } from '../store/board-actions';
+import { FireMissileAction, MovementAction, SetTileAction } from '../store/board-actions';
 
 import { BoardSpace } from '../models/board-space';
 import { MovementDirection } from '../models/movement-direction.enum';
@@ -22,9 +22,15 @@ import { environment } from '../../environments/environment';
   selector: 'app-board',
   template: `
     <h1>Board</h1>
+    <h3>Player</h3>
     <div>
-      <span><b>X</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'x'])"></span>
-      <span><b>Y</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'y'])"></span>
+      <span><b>Col</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'col'])"></span>
+      <span><b>Row</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['playerLocation', 'row'])"></span>
+    </div>
+    <h3>Missile</h3>
+     <div>
+      <span><b>Col</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['missileLocation', 'col'])"></span>
+      <span><b>Row</b></span>&nbsp;<span [innerHTML]="(board$ | async).getIn(['missileLocation', 'row'])"></span>
     </div>
     <app-board-row 
           [row]="row" 
@@ -59,7 +65,7 @@ export class BoardComponent {
   }
 
   @HostListener('window:keypress', ['$event']) processKeyStroke(event: any) {
-    console.dir(event.key);
+    // console.dir(event.key);
     let direction: MovementDirection = null;
     switch (event.key) {
       case 'k':
